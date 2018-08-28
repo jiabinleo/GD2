@@ -51,3 +51,8 @@ function getRequest() {
   }
   return theRequest;
 }
+
+// 转移视觉目标
+function setZoomAndCenter(lonLat){
+  map.setZoomAndCenter(18, lonLat);
+}

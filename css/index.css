@@ -1039,3 +1039,8 @@
 .wrap .rt {
   float: right;
 }
+.wrap .amap-marker-label {
+  border: none;
+  color: #333333;
+  border-radius: 5px;
+}
