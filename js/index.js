@@ -812,12 +812,14 @@ var indexPage = {
       zoom: 12 //地图显示的缩放级别
     });
     //步行导航
-    var walking = new AMap.Walking({
-      map: map,
-      panel: "panelTrack"
-    });
-    //根据起终点坐标规划步行路线
-    walking.search(walkingStart, walkingEnd);
+    // try {
+      var walking = new AMap.Walking({
+        map: map,
+        panel: "panelTrack"
+      });
+      //根据起终点坐标规划步行路线
+      walking.search(walkingStart, walkingEnd);
+    // } catch (error) {}
   },
   detailsSpotHtml: function(etc, data) {
     console.log(data);
@@ -826,7 +828,7 @@ var indexPage = {
     var weatherHtml = "";
     var description = ""; //短临预报
     $.ajax({
-      url: header240 + "/light/mobile/weather/getJsonpWeather",
+      url: header + "/light/mobile/weather/getJsonpWeather",
       type: "POST",
       async: false,
       dataType: "jsonp",
@@ -1085,7 +1087,6 @@ map.plugin("AMap.Geolocation", function() {
     if (data.info == "SUCCESS") {
     }
   }
-
   function onError(data) {
     // 定位出错
     console.log(

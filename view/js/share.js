@@ -6,7 +6,7 @@ $("#PublicNumber").qrcode({
 });
 console.log(getRequest().uuid);
 $.ajax({
-  url: header240 + "/dfbinterface/mobile/handle/GetSingleHandle", //后台接口地址
+  url: header + "/dfbinterface/mobile/handle/GetSingleHandle", //后台接口地址
   type: "POST",
   dataType: "json",
   data: { disasterid: getRequest().uuid },
@@ -28,4 +28,3 @@ function htmlL(data) {
   //   $("#liShu").html(data.fzsite.areaname);
   //   $("#time").html(data.fzsite.checkdate);
 }
-
