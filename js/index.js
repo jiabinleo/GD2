@@ -20,7 +20,9 @@ var StartingPoint = "",
   indexImgVideo = 0, // 当前显示第几张
   nextNum = 0, //切换下一张的最大数量
   imgYes = true, //当前弹框是img还是video
-  allData; //搜索部分所有数据
+  allData, //搜索部分所有数据
+  newOpenUuid; //左侧弹框地址编号
+var markers = [];
 map = new AMap.Map("container", { resizeEnable: true, layers: layers });
 var indexPage = {
   init: function() {
@@ -294,38 +296,19 @@ var indexPage = {
       indexPage.inspectingHtml(historyData);
     });
     //分享
-    $(document).on("click", "#qrButton", function() {
-      $(".mask-wrap").show();
-      $(".qrcode").show();
+    // $(document).on("click", "#qrButton", function() {
+    //   $(".mask-wrap").show();
+    //   $(".qrcode").show();
+    // });
+    //更多详情
+    $(document).on("click", "#openNew", function() {
+      var src = "http://127.0.0.1:5500/view/share.html?uuid=" + newOpenUuid;
+      window.open(src);
     });
     $(document).on("click", "#qrcode", function() {
       return false;
     });
-    $(document).on("click", "#copy", function() {
-      var Url2 = document.getElementById("copytxt").innerText;
-      var oInput = document.createElement("input");
-      oInput.value = Url2;
-      document.body.appendChild(oInput);
-      oInput.select(); // 选择对象
-      document.execCommand("Copy"); // 执行浏览器复制命令
-      oInput.className = "oInput";
-      oInput.style.display = "none";
-      $("#mask_copy").show();
-      $("#maskInnerCopy").animate({ opacity: 1, top: "50%" }, 500);
-    });
-    $(document).on("click", ".close6", function() {
-      $(".mask-wrap").hide();
-      $(".qrcode").hide();
-    });
-    $(document).on("click", "#maskCopyYes", function() {
-      $("#maskInnerCopy").animate(
-        { opacity: 0, top: 0, transform: "translateZ(300deg)" },
-        500,
-        function() {
-          $("#mask_copy").hide();
-        }
-      );
-    });
+    
     // 搜索
     $(document).on("click", "#searchs", function() {
       if (allData) {
@@ -529,7 +512,6 @@ var indexPage = {
   // 地图上显示点
   showPoint: function(data) {
     var tData = "";
-    //初始化地图对象，加载地图
     map.clearMap(); // 清除地图覆盖物
     for (var i = 0, marker; i < data.length; i++) {
       var icon = "";
@@ -565,10 +547,12 @@ var indexPage = {
       marker.content = tData;
       marker.on("click", markerClick);
 
-      // var addressCcontent = tData.addressname
       AMap.event.addListener(map, "zoomend", function() {
         var getzoom = map.getZoom();
-        map.clearMap(); // 清除地图覆盖物
+        // clearOverlays
+        // map.clearMap(); // 清除地图覆盖物
+        map.remove(markers);
+        markers = [];
         if (map.getZoom() > 17) {
           for (var i = 0, marker; i < data.length; i++) {
             var icon = "";
@@ -607,6 +591,7 @@ var indexPage = {
               offset: new AMap.Pixel(-100, -18), //修改label相对于maker的位置
               content: tData.addressname
             });
+            markers.push(marker);
           }
         } else {
           for (var i = 0, marker; i < data.length; i++) {
@@ -646,6 +631,7 @@ var indexPage = {
               offset: new AMap.Pixel(-100, -20), //修改label相对于maker的位置
               content: ""
             });
+            markers.push(marker);
           }
         }
       });
@@ -813,17 +799,18 @@ var indexPage = {
     });
     //步行导航
     // try {
-      var walking = new AMap.Walking({
-        map: map,
-        panel: "panelTrack"
-      });
-      //根据起终点坐标规划步行路线
-      walking.search(walkingStart, walkingEnd);
+    var walking = new AMap.Walking({
+      map: map,
+      panel: "panelTrack"
+    });
+    //根据起终点坐标规划步行路线
+    walking.search(walkingStart, walkingEnd);
     // } catch (error) {}
   },
   detailsSpotHtml: function(etc, data) {
     console.log(data);
-    $("#copytxt").html("127.0.0.1:5500/view/share.html?uuid=" + etc.uuid);
+    // $("#copytxt").html("127.0.0.1:5500/view/share.html?uuid=" + etc.uuid);
+    newOpenUuid = etc.uuid;
     // 获取天气
     var weatherHtml = "";
     var description = ""; //短临预报
@@ -972,7 +959,7 @@ var indexPage = {
             <span class="lt">灾情概况： <a class="status${
               data.fzsite.managestate
             }">( ${indexPage.status(data.fzsite.managestate)})</a></span>
-            <span id="qrButton" class="rt pl30">转发</span>
+           <span id="openNew" class="rt pl30">更多详情</span>
             <span class="rt" id="inspecting">巡查</span>
         </p>
         <p>
@@ -1026,16 +1013,28 @@ var indexPage = {
                 避难场所
                 </p>
             </li>
-            <li class="aroundList" data="重要场所">
+            <li class="aroundList" data="社区">
                 <img src="img/ImportantPlace.png" alt="">
                 <p>
-                    重要场所
+                社区
                 </p>
             </li>
             <li class="aroundList" data="水库">
-                <img src="img/reservoir.png" alt="">
+                <img src="img/ImportantPlace.png" alt="">
                 <p>
-                    水库
+                水库
+                </p>
+            </li>
+            <li class="aroundList" data="医院">
+                <img src="img/ImportantPlace.png" alt="">
+                <p>
+                    医院
+                </p>
+            </li>
+            <li class="aroundList" data="地铁站">
+                <img src="img/ImportantPlace.png" alt="">
+                <p>
+                地铁站
                 </p>
             </li>
         </ul>

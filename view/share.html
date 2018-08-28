@@ -24,7 +24,7 @@
             var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
             if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
                 // 移动
-                location.href = shareMobile + '?uiid=' + getRequest().uiid
+                location.href = shareMobile + '?uiid=' + config.getRequest().uiid
             } else {
             }
         }
@@ -128,6 +128,30 @@
                 <p>扫一扫关注微信公众号</p>
             </div>
         </footer>
+        <input id="shareBtn" class="shareBtn" type="button" value="转发">
+    </div>
+    <div class="mask-wrap">
+        <div id="qrcode" class="qrcode">
+            <h3>转发信息</h3>
+            <span class="closegray close6"></span>
+            <div class="qrcode-center">
+                <span id="copytxt">1231212312312</span>
+                <input type="button" id="copy" value="复制">
+                <input class="close6" type="button" value="取消">
+            </div>
+            <p>复制链接，可以任意粘贴到聊天工具，或者邮件当中，分享给朋友</p>
+        </div>
+    </div>
+    <div class="mask-copy" id="mask_copy">
+        <div class="mask-inner-copy" id="maskInnerCopy">
+            <p>消息提示：</p>
+            <p>
+                复制成功
+            </p>
+            <p>
+                <input id="maskCopyYes" type="button" value="确定">
+            </p>
+        </div>
     </div>
     <script src="/js/jquery.qrcode.min.js"></script>
     <script src="https://cdn.bootcss.com/Swiper/4.3.0/js/swiper.min.js"></script>
